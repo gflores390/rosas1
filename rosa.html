@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ramo de Rosas para Miriam</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffccd5, #f9f9f9);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      transition: background 2s ease;
+    }
+
+    .container {
+      position: relative;
+      width: 500px;
+      height: 600px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Rosa estilo caricatura */
+    .rosa {
+      position: absolute;
+      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      opacity: 0;
+      transform: translateY(50px) scale(0);
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+    }
+
+    .rosa.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .flor {
+      position: relative;
+      width: 150px;
+      height: 150px;
+    }
+
+    /* Pétalos externos */
+    .petalos-externos {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+    }
+
+    .petalo {
+      position: absolute;
+      background: #ff0033;
+      border: 3px solid #cc0022;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      box-shadow: inset 2px 2px 8px rgba(255,255,255,0.5);
+      transition: all 0.5s ease;
+    }
+
+    .rosa:hover .petalo {
+      background: #ff3355;
+      transform: scale(1.05);
+    }
+
+    .petalo1 {
+      width: 100px;
+      height: 90px;
+      top: 0;
+      left: 25px;
+    }
+
+    .petalo2 {
+      width: 90px;
+      height: 100px;
+      top: 25px;
+      left: 0;
+    }
+
+    .petalo3 {
+      width: 90px;
+      height: 100px;
+      top: 25px;
+      right: 0;
+    }
+
+    .petalo4 {
+      width: 100px;
+      height: 90px;
+      bottom: 0;
+      left: 25px;
+    }
+
+    /* Centro enrollado */
+    .centro {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      top: 35px;
+      left: 35px;
+      border-radius: 50%;
+      background: #ff0033;
+      border: 3px solid #cc0022;
+      box-shadow: inset 3px 3px 10px rgba(255,255,255,0.5),
+                 inset -3px -3px 10px rgba(0,0,0,0.3);
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .rosa:hover .centro {
+      transform: scale(1.1);
+    }
+
+    .espiral {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      top: 15px;
+      left: 15px;
+      border: 3px solid #cc0022;
+      border-radius: 50%;
+      box-shadow: inset 2px 2px 5px rgba(255,255,255,0.3);
+    }
+
+    /* Tallo y hojas */
+    .tallo {
+      position: absolute;
+      width: 10px;
+      height: 250px;
+      background: #008833;
+      top: 140px;
+      left: 70px;
+      border: 2px solid #006622;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .hoja {
+      position: absolute;
+      width: 80px;
+      height: 45px;
+      background: #00aa44;
+      border: 2px solid #008833;
+      border-radius: 0 50% 50% 50%;
+      box-shadow: inset 2px 2px 5px rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .rosa:hover .hoja {
+      transform: rotate(5deg) scale(1.1);
+    }
+
+    .hoja1 {
+      transform: rotate(30deg);
+      top: 180px;
+      left: 70px;
+    }
+
+    .hoja2 {
+      transform: rotate(150deg);
+      top: 240px;
+      left: 0;
+    }
+
+    /* Lazo grande en la parte superior */
+    .lazo {
+      position: absolute;
+      top: 160px;
+      left: 250px;
+      z-index: 100;
+      transform: rotate(-5deg) scale(0);
+      opacity: 0;
+      transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    .lazo.visible {
+      transform: rotate(-5deg) scale(1.5);
+      opacity: 1;
+    }
+
+    .lazo-centro {
+      width: 40px;
+      height: 40px;
+      background: #ff0066;
+      border: 3px solid #cc0055;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 10px rgba(255,0,102,0.6);
+    }
+
+    .lazo-bucle {
+      position: absolute;
+      width: 80px;
+      height: 40px;
+      border: 6px solid #ff0066;
+      border-bottom-color: #cc0055;
+      border-right-color: #cc0055;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(255,0,102,0.6);
+    }
+
+    .lazo-bucle-izquierdo {
+      transform: rotate(-30deg);
+      left: -50px;
+      top: 0;
+    }
+
+    .lazo-bucle-derecho {
+      transform: rotate(30deg);
+      right: -50px;
+      top: 0;
+    }
+
+    .lazo-cinta {
+      position: absolute;
+      width: 20px;
+      height: 120px;
+      background: #ff0066;
+      border: 3px solid #cc0055;
+      border-top: none;
+      box-shadow: 0 0 5px rgba(255,0,102,0.6);
+    }
+
+    .lazo-cinta-izquierda {
+      transform: rotate(15deg);
+      left: -5px;
+      top: 35px;
+    }
+
+    .lazo-cinta-derecha {
+      transform: rotate(-15deg);
+      right: -5px;
+      top: 35px;
+    }
+
+    /* Mensaje */
+    .mensaje {
+      text-align: center;
+      font-size: 28px;
+      color: #cc0022;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      margin-top: 30px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+
+    .mensaje.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nombre {
+      font-size: 36px;
+      font-weight: bold;
+      color: #ff0066;
+      display: inline-block;
+      animation: latido 1.5s infinite;
+    }
+
+    @keyframes latido {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Botón */
+    button {
+      background: linear-gradient(to bottom, #ff3366, #cc0022);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(204,0,34,0.4);
+      margin-top: 30px;
+      transition: all 0.3s ease;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      background: linear-gradient(to bottom, #ff4d7d, #e60026);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(204,0,34,0.6);
+    }
+
+    button:active {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(204,0,34,0.4);
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255,255,255,0.3);
+      transform: rotate(45deg);
+      transition: 0.5s;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    /* Corazones flotantes */
+    .corazon {
+      position: absolute;
+      color: rgba(255, 0, 102, 0.6);
+      font-size: 24px;
+      animation: flotar 5s linear infinite;
+      z-index: -1;
+      opacity: 0;
+    }
+
+    @keyframes flotar {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Instrucciones */
+    .instrucciones {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 20px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      transition: all 0.5s ease;
+      transform: translateY(20px);
+      opacity: 0.9;
+    }
+
+    .instrucciones.oculto {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .confeti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      top: -50px;
+      animation: caer 4s linear forwards;
+    }
+
+    @keyframes caer {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <!-- El ramo se generará aquí -->
+  </div>
+  
+  <h2 class="mensaje" id="mensaje">¡Hola <span class="nombre">Miriam</span>! Aquí están tus rosas</h2>
+  
+  <button id="btnAnimar">Crear Ramo de Rosas</button>
+  
+  <div class="instrucciones" id="instrucciones">
+    <p>Presiona el botón para ver un hermoso ramo de rosas con música</p>
+  </div>
+
+  <!-- Audio element -->
+  <audio id="musica">
+    <source src="ssstik.io_1745198580960.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+
+  <script>
+    // Crear una rosa
+    function crearRosa(escala, x, y, rotacion, delay, color) {
+      const rosa = document.createElement('div');
+      rosa.className = 'rosa';
+      rosa.style.transform = `translate(${x}px, ${y}px) rotate(${rotacion}deg) scale(0)`;
+      
+      const colorRosa = color || '#ff0033';
+      const colorBorde = color ? color.replace('ff', 'cc') : '#cc0022';
+      
+      // HTML para una rosa completa con pétalos
+      rosa.innerHTML = `
+        <div class="flor">
+          <div class="petalos-externos">
+            <div class="petalo petalo1" style="background:${colorRosa};border-color:${colorBorde}"></div>
+            <div class="petalo petalo2" style="background:${colorRosa};border-color:${colorBorde}"></div>
+            <div class="petalo petalo3" style="background:${colorRosa};border-color:${colorBorde}"></div>
+            <div class="petalo petalo4" style="background:${colorRosa};border-color:${colorBorde}"></div>
+          </div>
+          <div class="centro" style="background:${colorRosa};border-color:${colorBorde}">
+            <div class="espiral" style="border-color:${colorBorde}"></div>
+          </div>
+        </div>
+        <div class="tallo"></div>
+        <div class="hoja hoja1"></div>
+        <div class="hoja hoja2"></div>
+      `;
+      
+      // Añadir y animar la rosa después del delay
+      setTimeout(() => {
+        rosa.classList.add('visible');
+        rosa.style.transform = `translate(${x}px, ${y}px) rotate(${rotacion}deg) scale(${escala})`;
+      }, delay);
+      
+      return rosa;
+    }
+    
+    // Crear el lazo
+    function crearLazo() {
+      const lazo = document.createElement('div');
+      lazo.className = 'lazo';
+      
+      lazo.innerHTML = `
+        <div class="lazo-centro"></div>
+        <div class="lazo-bucle lazo-bucle-izquierdo"></div>
+        <div class="lazo-bucle lazo-bucle-derecho"></div>
+        <div class="lazo-cinta lazo-cinta-izquierda"></div>
+        <div class="lazo-cinta lazo-cinta-derecha"></div>
+      `;
+      
+      return lazo;
+    }
+    
+    // Crear corazones aleatorios
+    function crearCorazones() {
+      setInterval(() => {
+        const corazon = document.createElement('div');
+        corazon.className = 'corazon';
+        corazon.innerHTML = '❤';
+        corazon.style.left = Math.random() * window.innerWidth + 'px';
+        corazon.style.animationDuration = (3 + Math.random() * 7) + 's';
+        document.body.appendChild(corazon);
+        
+        // Eliminar después de la animación
+        setTimeout(() => {
+          document.body.removeChild(corazon);
+        }, 10000);
+      }, 300);
+    }
+    
+    // Crear confeti
+    function crearConfeti() {
+      const colores = ['#ff3366', '#33ff66', '#6633ff', '#ffcc33', '#33ccff'];
+      
+      for (let i = 0; i < 100; i++) {
+        setTimeout(() => {
+          const confeti = document.createElement('div');
+          confeti.className = 'confeti';
+          confeti.style.left = Math.random() * window.innerWidth + 'px';
+          confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+          confeti.style.width = (5 + Math.random() * 10) + 'px';
+          confeti.style.height = (5 + Math.random() * 10) + 'px';
+          confeti.style.animationDuration = (3 + Math.random() * 4) + 's';
+          document.body.appendChild(confeti);
+          
+          // Eliminar después de la animación
+          setTimeout(() => {
+            document.body.removeChild(confeti);
+          }, 5000);
+        }, i * 50);
+      }
+    }
+    
+    // Cambiar colores de fondo
+    function cambiarFondo() {
+      const colores = [
+        'linear-gradient(135deg, #ffccd5, #f9f9f9)',
+        'linear-gradient(135deg, #ffccd5, #ffe6e6)',
+        'linear-gradient(135deg, #ffd6e0, #fff0f5)',
+        'linear-gradient(135deg, #ffb3c6, #fff0f5)'
+      ];
+      let indiceColor = 0;
+      
+      setInterval(() => {
+        document.body.style.background = colores[indiceColor];
+        indiceColor = (indiceColor + 1) % colores.length;
+      }, 3000);
+    }
+    
+    // Configuración inicial
+    document.getElementById('btnAnimar').addEventListener('click', function() {
+      const container = document.getElementById('container');
+      container.innerHTML = ''; // Limpiar el contenedor
+      
+      // Reproducir música
+      const musica = document.getElementById('musica');
+      musica.currentTime = 80; // Comenzar en 1:20 (80 segundos)
+      musica.play().catch(e => {
+        console.log('No se pudo reproducir automáticamente el audio:', e);
+        alert('Haz clic en cualquier lugar de la página para reproducir la música');
+        document.body.addEventListener('click', () => {
+          musica.play();
+        }, { once: true });
+      });
+      
+      // Cambiar el fondo
+      cambiarFondo();
+      
+      // Mostrar mensaje
+      document.getElementById('mensaje').classList.add('visible');
+      
+      // Ocultar instrucciones
+      document.getElementById('instrucciones').classList.add('oculto');
+      
+      // Crear corazones flotantes
+      crearCorazones();
+      
+      // Lanzar confeti
+      crearConfeti();
+      
+      // Crear rosas en posiciones estratégicas con colores variados
+      const coloresRosas = ['#ff0033', '#ff3366', '#ff0055', '#ff5277', '#ff1a4d'];
+      
+      const posiciones = [
+        { x: 0, y: 0, r: 0, s: 1, d: 300, c: coloresRosas[0] },
+        { x: -80, y: -50, r: -15, s: 0.9, d: 600, c: coloresRosas[1] },
+        { x: 80, y: -50, r: 15, s: 0.9, d: 900, c: coloresRosas[2] },
+        { x: -40, y: 50, r: -10, s: 0.85, d: 1200, c: coloresRosas[3] },
+        { x: 40, y: 50, r: 10, s: 0.85, d: 1500, c: coloresRosas[4] },
+        { x: -120, y: 0, r: -20, s: 0.8, d: 1800, c: coloresRosas[0] },
+        { x: 120, y: 0, r: 20, s: 0.8, d: 2100, c: coloresRosas[1] },
+        { x: 0, y: -90, r: 0, s: 0.75, d: 2400, c: coloresRosas[2] },
+        { x: -60, y: -90, r: -10, s: 0.7, d: 2700, c: coloresRosas[3] },
+        { x: 60, y: -90, r: 10, s: 0.7, d: 3000, c: coloresRosas[4] },
+        { x: 0, y: 90, r: 0, s: 0.75, d: 3300, c: coloresRosas[0] },
+        { x: -100, y: -100, r: -25, s: 0.65, d: 3600, c: coloresRosas[1] },
+        { x: 100, y: -100, r: 25, s: 0.65, d: 3900, c: coloresRosas[2] }
+      ];
+      
+      // Añadir rosas con animación
+      posiciones.forEach((pos) => {
+        const rosa = crearRosa(pos.s, pos.x, pos.y, pos.r, pos.d, pos.c);
+        container.appendChild(rosa);
+      });
+      
+  
+      // Cambiar el texto del botón
+      this.textContent = '¡Qué hermoso ramo para Miriam!';
+      this.disabled = true;
+      this.style.background = 'linear-gradient(to bottom, #ff66a3, #ff0066)';
+    });
+    
+    // Asegurar que se pueda reproducir audio con interacción del usuario
+    document.body.addEventListener('click', () => {
+      const musica = document.getElementById('musica');
+      if (musica.paused) {
+        musica.currentTime = 80; // 1:20
+        musica.play().catch(e => console.log('No se pudo reproducir:', e));
+      }
+    });
+  </script>
+</body>
+</html>
